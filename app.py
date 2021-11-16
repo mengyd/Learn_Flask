@@ -4,7 +4,7 @@ from flask import escape, url_for, render_template
 app = Flask(__name__)
 
 
-name = 'Grey Li'
+name = '帅孟'
 movies = [
     {'title': 'My Neighbor Totoro', 'year': '1988'},
     {'title': 'Dead Poets Society', 'year': '1989'},
