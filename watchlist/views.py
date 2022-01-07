@@ -107,7 +107,7 @@ def message():
         if not name or not texts:
             flash('Invalid input.')
             return redirect(url_for('message'))
-        message = Message(name=name, texts=texts)   
+        message = Message(name=name, texts=texts)
         db.session.add(message)
         db.session.commit()
         flash('Message sent.')

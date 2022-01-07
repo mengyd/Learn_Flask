@@ -1,6 +1,6 @@
 import unittest
 from watchlist import app, db
-from watchlist.models import Movie, User
+from watchlist.models import Message, Movie, User
 from watchlist.commands import forge, initdb
 
 class WatchlistTestCase(unittest.TestCase):
@@ -17,8 +17,9 @@ class WatchlistTestCase(unittest.TestCase):
         user = User(name='Test', username='test')
         user.set_password('123')
         movie = Movie(title='Test Movie Title', year='2019')
+        message = Message(name='Test name', texts='test message')
         # 使用 add_all() 方法一次添加多个模型类实例，传入列表
-        db.session.add_all([user, movie])
+        db.session.add_all([user, movie, message])
         db.session.commit()
 
         self.client = app.test_client()  # 创建测试客户端
@@ -89,6 +90,35 @@ class WatchlistTestCase(unittest.TestCase):
         data = response.get_data(as_text=True)
         self.assertNotIn('Item created.', data)
         self.assertIn('Invalid input.', data)
+
+        # 测试创建留言
+        response = self.client.post('/message', data=dict(
+            name='test_name',
+            texts='new message'
+        ), follow_redirects=True)
+        data = response.get_data(as_text=True)
+        self.assertIn('Message sent.', data)
+        self.assertIn('test_name', data)
+        self.assertIn('new message', data)
+
+        # 测试创建留言, 但留言人名字为空
+        response = self.client.post('/message', data=dict(
+            name='',
+            texts='new message'
+        ), follow_redirects=True)
+        data = response.get_data(as_text=True)
+        self.assertNotIn('Message sent.', data)
+        self.assertIn('Invalid input.', data)
+
+        # 测试创建留言，但留言内容为空
+        response = self.client.post('/message', data=dict(
+            name='test_name',
+            texts=''
+        ), follow_redirects=True)
+        data = response.get_data(as_text=True)
+        self.assertNotIn('Message sent.', data)
+        self.assertIn('Invalid input.', data)
+
 
     # 测试更新条目
     def test_update_item(self):
@@ -242,6 +272,7 @@ class WatchlistTestCase(unittest.TestCase):
         result = self.runner.invoke(forge)
         self.assertIn('Done.', result.output)
         self.assertNotEqual(Movie.query.count(), 0)
+        self.assertNotEqual(Message.query.count(), 0)
 
     # 测试初始化数据库
     def test_initdb_command(self):
