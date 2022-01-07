@@ -1,7 +1,7 @@
 from watchlist import app, db
 from flask import request, redirect, url_for, flash, render_template
 from flask_login import current_user, login_required, login_user, logout_user
-from watchlist.models import Movie, User
+from watchlist.models import Message, Movie, User
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
@@ -98,3 +98,19 @@ def settings():
         redirect(url_for('index'))
 
     return render_template('settings.html')
+
+@app.route('/message', methods=['GET', 'POST'])
+def message():
+    if request.method == 'POST':
+        name = request.form.get('name')
+        texts = request.form.get('texts')
+        if not name or not texts:
+            flash('Invalid input.')
+            return redirect(url_for('message'))
+        message = Message(name=name, texts=texts)   
+        db.session.add(message)
+        db.session.commit()
+        flash('Message sent.')
+        return redirect(url_for('message'))
+    messages = Message.query.order_by(Message.time.desc()).all()
+    return render_template('message.html', messages=messages)

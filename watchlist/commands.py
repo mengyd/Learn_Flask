@@ -1,6 +1,6 @@
 from watchlist import app, db
 import click
-from watchlist.models import User, Movie
+from watchlist.models import Message, User, Movie
 
 @app.cli.command()
 @click.option('--drop', is_flag=True, help='Create after drop.')
@@ -26,11 +26,19 @@ def forge():
         {'title': 'Devils on the Doorstep', 'year': '1999'},
         {'title': 'WALL-E', 'year': '2008'},
     ]
+    messages = [
+        {'name': 'Texra', 'texts': 'Hello'},
+        {'name': 'Naruto', 'texts': 'Haha'},
+        {'name': 'Momoko', 'texts': 'Meow'},
+    ]
     user = User(name=name)
     db.session.add(user)
     for m in movies:
         movie = Movie(title=m['title'], year=m['year'])
         db.session.add(movie)
+    for msg in messages:
+        message = Message(name=msg['name'], texts=msg['texts'])
+        db.session.add(message)
     db.session.commit()
     click.echo('Done.')
 

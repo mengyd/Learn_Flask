@@ -131,3 +131,58 @@ input[name=year] {
 .inline-form {
     display: inline;
 }
+
+/* 留言板 */
+.second-level-information {
+    color: #6c757d;
+    font-size: 80%;
+    font-weight: 400;
+}
+
+.message-list {
+    list-style-type: none;
+    border: 1px solid #ddd;
+    padding: 0;
+}
+
+.message-list li {
+    padding: 12px 10px 12px 10px;
+    border-bottom: 1px solid #ddd;
+}
+
+.sender-name {
+    color: #28a745;
+    font-size: 1.25rem;
+    font-weight: 500;
+}
+
+.message-form {
+    width: 100%;
+    margin-bottom: 50px;
+}
+
+.input-group {
+    display: block;
+    width: 100%;
+}
+
+.form-element {
+    width: 100%;
+    height: 50px;
+    display: block;
+    margin: 10px 0px 10px 0px;
+    border-radius: .25rem;
+}
+
+.input-name {
+    height: 30px;
+}
+
+.btn-input-group{   
+    height: 40px;
+    width: 10%;
+    margin-top: 20px;
+    background-color: #6c757d;
+    border-color: #6c757d;
+    color: #fff
+}
